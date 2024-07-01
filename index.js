@@ -34,7 +34,7 @@ app.get("/", async (req, res) => {
       .filter(item => item.hasOwnProperty('country_code'))
       .map(item => item.country_code);
   
-      res.render("index.ejs", {countries});
+      res.render("index.ejs", {countries, total : countries.length});
     console.log(countries);
   }
   displayCountryCodes(country);
