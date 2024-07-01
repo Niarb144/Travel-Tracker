@@ -26,7 +26,7 @@ app.get("/", async (req, res) => {
   });
   console.log(result.rows);
   res.render("index.ejs", {countries : countries, total : countries.length});
-  db.end();
+  
 });
 
 app.post("/add", async (req, res) => {
@@ -34,11 +34,19 @@ app.post("/add", async (req, res) => {
   console.log(countryName);
 
   const check_country = await db.query("SELECT country_code FROM countries WHERE country_name = $1", [countryName]);
-   console.log(check_country);
-   res.render("index.ejs");
-   db.end();
+  //  const country_code = check_country.rows.country_code;
+    let new_country_code;
+    check_country.rows.forEach((country) => {
+      new_country_code = country.country_code;
+  });
+   console.log(new_country_code);
+
+  const insert_country = await db.query("INSERT INTO visited_countries (country_code) VALUES ($1)" , [new_country_code]);
+   res.redirect("/");
+   
   // const input = await db.query("INSERT INTO visited_countries(country_code) VALUES($A)", [input_country]);
 });
+
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
